@@ -23,7 +23,7 @@ const sendResult = (application: LoanApplication) => {
     ...application,
     totalAssetValue,
     totalProfileOrLoss,
-    hasLoan: !!application.loan,
+    hasLoan: application.loan && application.loan![0].status === "Approved",
   };
 };
 

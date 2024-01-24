@@ -37,21 +37,27 @@ export const decisionEngine = async (id: string) => {
   }, 0);
 
   if (averageAssetValut > currentLoan?.amount) {
-    return {
-      approvedPercentage: "100%",
-      amount: currentLoan?.amount,
-      status: "Approved",
-    };
+    return [
+      {
+        approvedPercentage: "100%",
+        amount: currentLoan?.amount,
+        status: "Approved",
+      },
+    ];
   } else if (totalProfitOrLoss > 0) {
-    return {
-      approvedPercentage: "60%",
+    return [
+      {
+        approvedPercentage: "60%",
+        amount: currentLoan?.amount,
+        status: "Approved",
+      },
+    ];
+  }
+  return [
+    {
+      approvedPercentage: "20%",
       amount: currentLoan?.amount,
       status: "Approved",
-    };
-  }
-  return {
-    approvedPercentage: "20%",
-    amount: currentLoan?.amount,
-    status: "Approved",
-  };
+    },
+  ];
 };
