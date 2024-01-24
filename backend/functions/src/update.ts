@@ -16,15 +16,13 @@ type UpdateInput = {
 };
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  if (!event.body || !(event.pathParameters && event.pathParameters.id)) {
+  if (!(event.pathParameters && event.pathParameters.id)) {
     console.log("no body or id to update");
 
     throw Error();
   }
 
-  const data: UpdateInput = JSON.parse(event.body);
-
-  const loan = await decisionEngine(event.pathParameters.id, data.loanAmount);
+  const loan = await decisionEngine(event.pathParameters.id);
 
   const exp = updateExpression({
     loan,

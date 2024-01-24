@@ -16,5 +16,5 @@ export type LoanApplication = {
   companyName: string;
   accountingProvider: string;
   assets: Assets[];
-  Loan?: Loan[];
+  loan?: Loan[];
 };

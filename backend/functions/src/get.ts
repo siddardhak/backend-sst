@@ -23,7 +23,7 @@ const sendResult = (application: LoanApplication) => {
     ...application,
     totalAssetValue,
     totalProfileOrLoss,
-    hasLoan: application.Loan && application.Loan.length > 0 ? true : false,
+    hasLoan: application.loan && application.loan.length > 0 ? true : false,
   };
 };
 

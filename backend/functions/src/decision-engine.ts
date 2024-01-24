@@ -8,7 +8,7 @@ const DynamodbConfig = process.env.STAGE === "test" ? dockerComposeConfig : {};
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient(DynamodbConfig);
 
-export const decisionEngine = async (id: string, amount: number) => {
+export const decisionEngine = async (id: string) => {
   const params = {
     TableName: config.loanTable,
     Key: { id },
@@ -19,34 +19,43 @@ export const decisionEngine = async (id: string, amount: number) => {
     throw Error("No Loan application found");
   }
 
+  const application = results.Item as LoanApplication;
+
+  console.log(application);
+
+  const currentLoan = application.loan![0];
+
+  console.log(currentLoan);
+
+  if (!currentLoan) {
+    throw Error("Loan amount not found");
+  }
+
   const averageAssetValut =
-    (results.Item as LoanApplication).assets.reduce(function (prev, cur) {
+    application.assets.reduce(function (prev, cur) {
       return prev + cur.assetValue;
     }, 0) / 12;
 
-  const totalProfitOrLoss = (results.Item as LoanApplication).assets.reduce(
-    function (prev, cur) {
-      return prev + cur.assetValue;
-    },
-    0
-  );
+  const totalProfitOrLoss = application.assets.reduce(function (prev, cur) {
+    return prev + cur.assetValue;
+  }, 0);
 
-  if (averageAssetValut > amount) {
+  if (averageAssetValut > currentLoan?.amount) {
     return {
       approvedPercentage: "100%",
-      amount,
+      amount: currentLoan?.amount,
       status: "Approved",
     };
   } else if (totalProfitOrLoss > 0) {
     return {
       approvedPercentage: "60%",
-      amount,
+      amount: currentLoan?.amount,
       status: "Approved",
     };
   }
   return {
     approvedPercentage: "20%",
-    amount,
+    amount: currentLoan?.amount,
     status: "Approved",
   };
 };
