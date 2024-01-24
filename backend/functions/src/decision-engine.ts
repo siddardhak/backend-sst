@@ -32,9 +32,21 @@ export const decisionEngine = async (id: string, amount: number) => {
   );
 
   if (averageAssetValut > amount) {
-    return "100%";
+    return {
+      approvedPercentage: "100%",
+      amount,
+      status: "Approved",
+    };
   } else if (totalProfitOrLoss > 0) {
-    return "60%";
+    return {
+      approvedPercentage: "60%",
+      amount,
+      status: "Approved",
+    };
   }
-  return "20%";
+  return {
+    approvedPercentage: "20%",
+    amount,
+    status: "Approved",
+  };
 };

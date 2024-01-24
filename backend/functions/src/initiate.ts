@@ -11,6 +11,12 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient(DynamodbConfig);
 import { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { config } from "./config";
 
+type CreateLoanRequestInput = {
+  companyName: string;
+  accountingProvider: string;
+  amount: number;
+};
+
 export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2
 ) => {
@@ -18,9 +24,15 @@ export const handler: APIGatewayProxyHandlerV2 = async (
     throw Error();
   }
 
-  const data: LoanApplication = JSON.parse(event.body);
+  const data: CreateLoanRequestInput = JSON.parse(event.body);
 
   const assets = generateAssets();
+
+  const loan = [
+    {
+      amount: data.amount,
+    },
+  ];
 
   const params = {
     TableName: config.loanTable,
@@ -29,6 +41,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (
       companyName: data.companyName,
       accountingProvider: data.accountingProvider,
       assets,
+      loan,
     },
   };
   await dynamoDb.put(params).promise();

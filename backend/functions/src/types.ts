@@ -1,7 +1,7 @@
 type Loan = {
   status: "Approved";
   amount: number;
-  approvedPercentage: number;
+  approvedPercentage?: number;
 };
 
 type Assets = {

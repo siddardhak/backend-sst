@@ -24,14 +24,10 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
   const data: UpdateInput = JSON.parse(event.body);
 
-  const approvedPercentage = await decisionEngine(
-    event.pathParameters.id,
-    data.loanAmount
-  );
+  const loan = await decisionEngine(event.pathParameters.id, data.loanAmount);
 
   const exp = updateExpression({
-    ...data,
-    loan: [{ status: "Approved", approvedPercentage, amount: data.loanAmount }],
+    loan,
   });
 
   const params = {
