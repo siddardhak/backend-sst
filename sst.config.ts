@@ -5,7 +5,7 @@ import { Stack } from "./infra/stack";
 export default {
   config(_input) {
     return {
-      name: "shopping",
+      name: "Loan",
       region: "ap-southeast-2",
     };
   },

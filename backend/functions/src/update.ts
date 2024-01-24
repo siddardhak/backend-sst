@@ -20,7 +20,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
   const data: UpdateInput = JSON.parse(event.body);
 
-  const approvedPercentage = decisionEngine(
+  const approvedPercentage = await decisionEngine(
     event.pathParameters.id,
     data.loanAmount
   );
