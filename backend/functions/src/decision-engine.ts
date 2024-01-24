@@ -21,11 +21,7 @@ export const decisionEngine = async (id: string) => {
 
   const application = results.Item as LoanApplication;
 
-  console.log(application);
-
   const currentLoan = application.loan![0];
-
-  console.log(currentLoan);
 
   if (!currentLoan) {
     throw Error("Loan amount not found");
