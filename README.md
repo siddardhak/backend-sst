@@ -27,3 +27,17 @@ aws-vault exec [your aws-vault profile] -- yarn deploy --stage <stage you to use
 
 4. This will deploy backend to the AWS and outputs api url and frontend url on your console.
 5. Backend url is basically a apigw url, this can be further configured to custom domain.
+
+## Running Tests
+
+1. Run dynamodb doker container on your local using below command
+   ```
+   docker run --rm -d -p 8000:8000 amazon/dynamodb-local
+
+   ``` 
+2. test/tables.ts file is connect to this docker container and createTables method will create table dyncmoadb table and test cases will keep wirting and reading the data from this table in the docker container
+3. to run the test use below command
+
+   ```
+   yarn test
+   ```
