@@ -10,7 +10,7 @@ import { config } from "./config";
 export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2
 ) => {
-  if (!event.body) {
+  if (!event.body || !(event.pathParameters && event.pathParameters.id)) {
     throw Error();
   }
 
@@ -21,7 +21,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (
   const params = {
     TableName: config.loanTable,
     Item: {
-      id: data.id,
+      id: event.pathParameters.id,
       companyName: data.companyName,
       accountingProvider: data.accountingProvider,
       assets,
