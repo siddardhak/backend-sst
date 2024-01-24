@@ -6,7 +6,7 @@ type Loan = {
 
 type Assets = {
   year: number;
-  month: number;
+  month: string;
   profitOrLoss: number;
   assetValue: number;
 };

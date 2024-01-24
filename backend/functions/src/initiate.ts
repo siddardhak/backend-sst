@@ -17,6 +17,21 @@ type CreateLoanRequestInput = {
   amount: number;
 };
 
+var monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export const handler: APIGatewayProxyHandlerV2 = async (
   event: APIGatewayProxyEventV2
 ) => {
@@ -59,10 +74,10 @@ function generateRandomInteger(min: number, max: number) {
 function generateAssets() {
   let assets = [];
 
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 0; i < 12; i++) {
     const values = {
       year: 2023,
-      month: i,
+      month: monthNames[i],
       profitOrLoss: generateRandomInteger(-30000, 30000),
       assetValue: generateRandomInteger(0, 10000),
     };
