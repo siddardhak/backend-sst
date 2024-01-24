@@ -4,21 +4,34 @@ const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { config } from "./config";
-import { updateExpression } from "./dynamodbUpdateExpression";
+import { decisionEngine } from "./decision-engine";
+import { updateExpression } from "./dynamodb-update-expression";
+
+type UpdateInput = {
+  loanAmount: number;
+};
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  if (!event.body || !event.pathParameters) {
+  if (!event.body || !(event.pathParameters && event.pathParameters.id)) {
     console.log("no body or id to update");
 
     throw Error();
   }
 
-  const data = JSON.parse(event.body);
+  const data: UpdateInput = JSON.parse(event.body);
 
-  const exp = updateExpression({ ...data });
+  const approvedPercentage = decisionEngine(
+    event.pathParameters.id,
+    data.loanAmount
+  );
+
+  const exp = updateExpression({
+    ...data,
+    loan: [{ status: "Approved", approvedPercentage, amount: data.loanAmount }],
+  });
 
   const params = {
-    TableName: config.productTable,
+    TableName: config.loanTable,
     Key: {
       id: event.pathParameters.id,
     },
