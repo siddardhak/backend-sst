@@ -1,8 +1,11 @@
 import AWS from "aws-sdk";
 
 import { config } from "./config";
+import { dockerComposeConfig } from "./dynamodbConfig";
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+const DynamodbConfig = process.env.STAGE === "test" ? dockerComposeConfig : {};
+
+const dynamoDb = new AWS.DynamoDB.DocumentClient(DynamodbConfig);
 
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { LoanApplication } from "./types";
@@ -29,11 +32,15 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
     throw Error("No Id provided");
   }
 
+  console.log("get result by Id", { event });
+
   const params = {
     TableName: config.loanTable,
     Key: { id: event.pathParameters.id },
   };
   const results = await dynamoDb.get(params).promise();
+
+  console.log("Result from Dynamodb", { results });
 
   return results.Item
     ? {

@@ -2,7 +2,11 @@ import AWS from "aws-sdk";
 
 import { LoanApplication } from "./types";
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+import { dockerComposeConfig } from "./dynamodbConfig";
+
+const DynamodbConfig = process.env.STAGE === "test" ? dockerComposeConfig : {};
+
+const dynamoDb = new AWS.DynamoDB.DocumentClient(DynamodbConfig);
 
 import { APIGatewayProxyEventV2, APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { config } from "./config";

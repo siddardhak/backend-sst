@@ -1,9 +1,12 @@
 import AWS from "aws-sdk";
 
 import { config } from "./config";
+import { dockerComposeConfig } from "./dynamodbConfig";
 import { LoanApplication } from "./types";
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
+const DynamodbConfig = process.env.STAGE === "test" ? dockerComposeConfig : {};
+
+const dynamoDb = new AWS.DynamoDB.DocumentClient(DynamodbConfig);
 
 export const decisionEngine = async (id: string, amount: number) => {
   const params = {

@@ -26,8 +26,8 @@ export function Stack({ stack }: StackContext) {
     },
     routes: {
       "GET    /loan/{id}": "backend/functions/src/get.handler",
-      "POST   /apply/{id}": "backend/functions/src/initiate.handler",
-      "PUT    /submit/{id}": "backend/functions/src/update.handler",
+      "POST   /loan/{id}": "backend/functions/src/initiate.handler",
+      "PUT    /loan/{id}": "backend/functions/src/update.handler",
     },
   });
 
