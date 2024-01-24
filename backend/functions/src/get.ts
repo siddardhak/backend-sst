@@ -25,15 +25,13 @@ const sendResult = (application: LoanApplication) => {
 };
 
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
-  if (!event.body) {
-    throw Error();
+  if (!(event.pathParameters && event.pathParameters.id)) {
+    throw Error("No Id provided");
   }
-
-  const data: { id: string } = JSON.parse(event.body);
 
   const params = {
     TableName: config.loanTable,
-    Key: { id: data.id },
+    Key: { id: event.pathParameters.id },
   };
   const results = await dynamoDb.get(params).promise();
 
